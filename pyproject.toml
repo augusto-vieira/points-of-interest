@@ -1,0 +1,10 @@
+[project]
+name = "points-of-interest"
+version = "0.1.0"
+description = "API para buscar Pontos de Interesse próximos a uma coordenada"
+authors = [{ name = "Augusto Vieira"}]
+dependencies = [
+    "fastapi",
+    "uvicorn"
+]
+requires-python = ">=3.8"

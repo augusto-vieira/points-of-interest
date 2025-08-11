@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    container_name: poi_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: poiuser        # Usuário do banco
+      POSTGRES_PASSWORD: poipass    # Senha do banco
+      POSTGRES_DB: poidb            # Nome do banco
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # Para persistência dos dados
+
+volumes:
+  postgres_data:
+    # Volume para armazenar os dados do banco
+
+# docker-compose down && docker-compose up -d
+# docker-compose down -v
+# docker-compose up -d
