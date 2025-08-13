@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Body, HTTPException
-from app.schemas.poi_schema import POISearchRequest, POISearchResponse, POIItem
-from app.services.finder import find_nearby_pois
+from app.schemas.poi_schema import POISearchRequest, POISearchResponse, POIItem, POICreateResponse, POICreateRequest
+from app.services.finder import find_nearby_pois, find_poi,add_poi
 from app.models.point import POI
+
 
 # Instancia a aplicação FastAPI
 app = FastAPI(title="Points of Interest")
@@ -44,3 +45,43 @@ def create_poi(poi: POIItem = Body(...)):
     new_poi = POI(name=poi.name, x=poi.x, y=poi.y)
     pois.append(new_poi)
     return poi
+
+@app.get("/name", response_model=POISearchResponse)
+def find_name_poi(name: str):     # Endpoint para buscar POIs por nome.
+
+    # Chama a função de busca no banco de dados
+    pois = find_poi(name=name)
+
+    # Converta os objetos ORM para POIItem
+    # Isso é necessário para garantir a serialização correta na resposta
+    poi_items = [POIItem(name=poi.name, x=poi.x, y=poi.y) for poi in pois]
+
+    # Retorna a resposta no formato esperado pelo cliente
+    return POISearchResponse(results=poi_items)
+
+@app.post("/pois/", response_model=POICreateResponse)
+def create_poi(poi_data: POICreateRequest):
+    try:
+            # Adiciona o POI ao banco de dados
+            success = add_poi(name=poi_data.name, x=poi_data.x, y=poi_data.y)
+            
+            if success:
+                # Se necessário, poderia buscar o POI recém-criado para retornar seus dados
+                return POICreateResponse(
+                    success=True,
+                    message=f"POI '{poi_data.name}' criado com sucesso",
+                    poi=POIItem(name=poi_data.name, x=poi_data.x, y=poi_data.y)
+                )
+            else:
+                return POICreateResponse(
+                    success=False,
+                    message="Falha ao criar POI - verifique os dados informados"
+                )
+                
+    except Exception as e:
+        # Log detalhado do erro (em produção, usar logging)
+        print(f"Erro inesperado ao criar POI: {str(e)}")
+        return POICreateResponse(
+            success=False,
+            message="Ocorreu um erro interno ao processar sua requisição"
+        )

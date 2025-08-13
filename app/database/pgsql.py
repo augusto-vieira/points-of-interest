@@ -16,9 +16,6 @@ engine = create_engine(DATABASE_URL, echo=True)
 # Cria uma fábrica de sessões para interagir com o banco
 SessionLocal = sessionmaker(bind=engine)
 
-# # Base para definição dos modelos ORM
-# Base = declarative_base()
-
 def get_db():
     """
     Dependência do FastAPI para obter uma sessão de banco de dados.
