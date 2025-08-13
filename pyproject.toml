@@ -5,6 +5,9 @@ description = "API para buscar Pontos de Interesse próximos a uma coordenada"
 authors = [{ name = "Augusto Vieira"}]
 dependencies = [
     "fastapi",
-    "uvicorn"
+    "uvicorn",
+    "dotenv",
+    "sqlalchemy",
+    "psycopg",
 ]
 requires-python = ">=3.8"

@@ -1,0 +1,31 @@
+# Diretórios gerados pelo Python/Pip
+*.egg-info/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+*.py[cod]
+
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# VSCODE e IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Builds e distribuições
+build/
+dist/
+*.egg
+*.whl
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.swp
+*~
+
+# Arquivos de ambiente (envs sensíveis)
+.secrets

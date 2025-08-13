@@ -11,13 +11,13 @@ services:
       POSTGRES_DB: poidb            # Nome do banco
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    # Para persistência dos dados
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     # Para persistência dos dados
 
-volumes:
-  postgres_data:
-    # Volume para armazenar os dados do banco
+# volumes:
+#   postgres_data:
+#     # Volume para armazenar os dados do banco
 
 # docker-compose down && docker-compose up -d
 # docker-compose down -v

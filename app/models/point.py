@@ -1,21 +1,42 @@
 # app/models/point.py
+from sqlalchemy import Column, Integer, String, CheckConstraint
+from sqlalchemy.orm import declarative_base
 
-class POI:
-    """
-    Representa um Ponto de Interesse (POI) com nome e coordenadas (x, y).
-    """
+# class POI:
+#     """
+#     Representa um Ponto de Interesse (POI) com nome e coordenadas (x, y).
+#     """
 
-    def __init__(self, name: str, x: int, y: int):
-        self.name = name
-        self.x = x
-        self.y = y
+#     def __init__(self, name: str, x: int, y: int):
+#         self.name = name
+#         self.x = x
+#         self.y = y
 
-    def to_dict(self) -> dict:
-        """
-        Converte o objeto POI em um dicionário para retorno na API.
-        """
-        return {
-            "name": self.name,
-            "x": self.x,
-            "y": self.y,
-        }
+#     def to_dict(self) -> dict:
+#         """
+#         Converte o objeto POI em um dicionário para retorno na API.
+#         """
+#         return {
+#             "name": self.name,
+#             "x": self.x,
+#             "y": self.y,
+#         }
+
+Base = declarative_base()
+
+class POI(Base):
+    __tablename__ = 'pois'  # Nome da tabela no banco
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, nullable=False)
+    x = Column(Integer, nullable=False)
+    y = Column(Integer, nullable=False)
+
+    # Restrições para garantir apenas valores positivos
+    __table_args__ = (
+        CheckConstraint('x >= 0', name='check_x_positive'),
+        CheckConstraint('y >= 0', name='check_y_positive'),
+    )
+
+    def __repr__(self):
+        return f"<POI(id={self.id}, name='{self.name}', x={self.x}, y={self.y})>"
