@@ -25,15 +25,6 @@ class POISearchResponse(BaseModel):
     results: List[POIItem]
 
 ###
-class POINameSearchRequest(BaseModel):
-    """Modelo de requisição para busca de POIs por nome.
-    
-    Atributos:
-        name (str): Nome ou parte do nome do POI que será buscado.
-                    A busca é case-insensitive e permite pesquisa parcial.
-    """
-    name: str
-
 class POICreateRequest(BaseModel):
     """Modelo de requisição para criação de um novo POI"""
     name: str
@@ -54,3 +45,24 @@ class POICreateResponse(BaseModel):
     success: bool
     message: str
     poi: Optional[POIItem] = None
+
+class POIUpdateRequest(BaseModel):
+    """Modelo para atualização de POI"""
+    name: Optional[str] = None
+    x: Optional[int] = None
+    y: Optional[int] = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "name": "Novo Nome",
+                "x": 30,
+                "y": 40
+            }
+        }
+
+class POIDeleteResponse(BaseModel):
+    """Modelo de resposta para deleção de POI"""
+    success: bool
+    message: str
+    deleted_id: Optional[int] = None

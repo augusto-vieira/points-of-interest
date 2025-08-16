@@ -1,56 +1,55 @@
 from fastapi import FastAPI, Body, HTTPException
-from app.schemas.poi_schema import POISearchRequest, POISearchResponse, POIItem, POICreateResponse, POICreateRequest
-from app.services.finder import find_nearby_pois, find_poi,add_poi
+from app.schemas.poi_schema import POISearchRequest, POISearchResponse, POIItem, POICreateResponse, POICreateRequest, POIUpdateRequest, POIDeleteResponse
+from app.services.finder import find_nearby_pois, find_pois, add_poi, list_pois, update_poi, delete_poi
 from app.models.point import POI
 
 
 # Instancia a aplicação FastAPI
 app = FastAPI(title="Points of Interest")
 
-# Lista fixa de POIs (Points of Interest)
-pois = [
-    POI(name="Lanchonete", x=27, y=12),
-    POI(name="Posto", x=31, y=18),
-    POI(name="Joalheria", x=15, y=12),
-    POI(name="Floricultura", x=19, y=21),
-    POI(name="Pub", x=12, y=8),
-    POI(name="Supermercado", x=23, y=6),
-    POI(name="Churrascaria", x=28, y=2),
-]
-
-
-@app.get("/list", response_model=POISearchResponse)
-def list_pois():
+@app.get("/api/list", response_model=POISearchResponse)
+def list_pois_endpoint():
     """
     Retorna todos os POIs cadastrados.
     """
-    return POISearchResponse(results=[poi.to_dict() for poi in pois])
+
+    # Chama a função de listar os POIs no banco de dados
+    pois = list_pois()
+
+    # Converta os objetos ORM para POIItem
+    poi_items = [POIItem(name=poi.name, x=poi.x, y=poi.y) for poi in pois]
+
+    # Retorna a resposta no formato esperado pelo cliente
+    return POISearchResponse(results=poi_items)
 
 @app.post("/search", response_model=POISearchResponse)
 def search_pois(request: POISearchRequest):
     """
-    Rota para buscar POIs próximos a um ponto (x, y), dentro de uma distância máxima.
+    Rota para buscar POIs próximos a um ponto (x, y), dentro de uma distância máxima (d-max).
     """
-    result = find_nearby_pois(pois, x=request.x, y=request.y, max_distance=request.max_distance)
-    return POISearchResponse(results=result)
 
-@app.post("/create", response_model=POIItem)
-def create_poi(poi: POIItem = Body(...)):
-    """
-    Cadastra um novo POI com nome e coordenadas inteiras não negativas.
-    """
-    if poi.x < 0 or poi.y < 0:
-        raise HTTPException(status_code=400, detail="Coordenadas devem ser inteiras não negativas.")
-    
-    new_poi = POI(name=poi.name, x=poi.x, y=poi.y)
-    pois.append(new_poi)
-    return poi
+    nearby_pois = find_nearby_pois(
+        x=request.x,
+        y=request.y,
+        max_distance=request.max_distance
+    )
 
-@app.get("/name", response_model=POISearchResponse)
-def find_name_poi(name: str):     # Endpoint para buscar POIs por nome.
+    # Converte para POIItem
+    poi_items = [
+        POIItem(name=poi.name, x=poi.x, y=poi.y) 
+        for poi in nearby_pois
+    ]
+
+    return POISearchResponse(results=poi_items)
+
+@app.get("/api/pois/by-name", response_model=POISearchResponse)
+def search_pois_by_name(name: str):   
+    """
+    Rota para buscar POIs por nome.
+    """
 
     # Chama a função de busca no banco de dados
-    pois = find_poi(name=name)
+    pois = find_pois(name=name)
 
     # Converta os objetos ORM para POIItem
     # Isso é necessário para garantir a serialização correta na resposta
@@ -59,8 +58,11 @@ def find_name_poi(name: str):     # Endpoint para buscar POIs por nome.
     # Retorna a resposta no formato esperado pelo cliente
     return POISearchResponse(results=poi_items)
 
-@app.post("/pois/", response_model=POICreateResponse)
+@app.post("/api/pois", response_model=POICreateResponse)
 def create_poi(poi_data: POICreateRequest):
+    """
+    Rota para cadastrar um POI.
+    """
     try:
             # Adiciona o POI ao banco de dados
             success = add_poi(name=poi_data.name, x=poi_data.x, y=poi_data.y)
@@ -84,4 +86,65 @@ def create_poi(poi_data: POICreateRequest):
         return POICreateResponse(
             success=False,
             message="Ocorreu um erro interno ao processar sua requisição"
+        )
+
+@app.put("/pois/{poi_id}", response_model=POICreateResponse)
+def update_poi_endpoint(
+    poi_id: int, 
+    update_data: POIUpdateRequest
+):
+    """
+    Atualiza um POI existente
+    
+    Args:
+        poi_id: ID do POI a ser atualizado
+        update_data: Campos a serem atualizados (nome, x, y)
+        
+    Returns:
+        Resposta com o POI atualizado ou mensagem de erro
+    """
+    # Converte o Pydantic model para dict, removendo campos não informados (None)
+    update_dict = update_data.model_dump(exclude_unset=True)
+    
+    updated_poi = update_poi(poi_id, update_dict)
+    
+    if not updated_poi:
+        return POICreateResponse(
+            success=False,
+            message=f"POI com ID {poi_id} não encontrado"
+        )
+    
+    return POICreateResponse(
+        success=True,
+        message="POI atualizado com sucesso",
+        poi=POIItem(
+            name=updated_poi.name,
+            x=updated_poi.x,
+            y=updated_poi.y
+        )
+    )
+
+@app.delete("/pois/{poi_id}", response_model=POIDeleteResponse)
+def delete_poi_endpoint(poi_id: int):
+    """
+    Remove um POI pelo ID
+    
+    Args:
+        poi_id: ID do POI a ser removido
+        
+    Returns:
+        POIDeleteResponse: Resposta indicando sucesso/falha
+    """
+    success = delete_poi(poi_id)
+    
+    if success:
+        return POIDeleteResponse(
+            success=True,
+            message=f"POI {poi_id} removido com sucesso",
+            deleted_id=poi_id
+        )
+    else:
+        return POIDeleteResponse(
+            success=False,
+            message=f"POI {poi_id} não encontrado"
         )

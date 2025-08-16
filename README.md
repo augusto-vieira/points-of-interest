@@ -10,10 +10,16 @@ Este projeto implementa uma API REST para cadastro e consulta de **Pontos de Int
 
 📝 Requisitos para ser atendidos:
 
-- [x] **Cadastrar POIs** com **nome** e coordenadas **(x, y)** inteiras não negativas.
-- [ ] Os POIs devem ser **armazenados** em uma **base de dados.**
-- [x] "**Listar** todos os POIs cadastrados*"
+negativas.
 - [x] Listar os **POIs por proximidade**. Este serviço receberá uma coordenada **X** e uma coordenada **Y**, especificando um ponto de referência, bem como uma distância **máxima (d-max)** em metros. O serviço deverá **retornar todos os POIs** da base de dados que estejam a uma distância menor ou igual a d-max a partir do ponto de referência.
+- [x] **Listar** todos os POIs cadastrados
+- [x] **Cadastrar POIs** com **nome** e coordenadas **(x, y)** inteiras não 
+- [x] Os POIs devem ser **armazenados** em uma **base de dados.**
+
+📝 Novas funcionalidades:
+- [x] **Atualizar** um POIs
+- [x] **Deletar*** um POIs
+- [x] **Encontrar** um POIs **por nome**
 
 ## 📦 Tecnologias
 
