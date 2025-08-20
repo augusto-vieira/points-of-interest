@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>POI Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-2 sidebar">
+            <h4 class="text-center">POIs</h4>
+            <button class="sidebar-btn" onclick="showForm('list')"><i class="bi bi-list"></i> List</button>
+            <button class="sidebar-btn" onclick="showForm('add')"><i class="bi bi-plus-circle"></i> Add</button>
+            <button class="sidebar-btn" onclick="showForm('update')"><i class="bi bi-pencil"></i> Update</button>
+            <button class="sidebar-btn" onclick="showForm('delete')"><i class="bi bi-trash"></i> Delete</button>
+            <button class="sidebar-btn" onclick="showForm('find')"><i class="bi bi-search"></i> Find</button>
+            <button class="sidebar-btn" onclick="showForm('nearby')"><i class="bi bi-geo"></i> Nearby</button>
+        </div>
+
+        <!-- Main content -->
+        <div class="col-7 p-4">
+            <h2>POI Management</h2>
+            <div id="map"></div>
+        </div>
+
+        <!-- Forms (painel lateral direito) -->
+        <div class="col-3 p-4">
+            <div id="form-container" class="form-section">
+                <h5>Selecione uma ação</h5>
+                <p>Use o menu ao lado para gerenciar POIs.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- Custom JS -->
+<script src="script.js"></script>
+</body>
+</html>

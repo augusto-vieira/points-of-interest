@@ -1,11 +1,21 @@
 from fastapi import FastAPI, Body, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from app.schemas.poi_schema import POISearchRequest, POISearchResponse, POIItem, POICreateResponse, POICreateRequest, POIUpdateRequest, POIDeleteResponse
 from app.services.finder import find_nearby_pois, find_pois, add_poi, list_pois, update_poi, delete_poi
 from app.models.point import POI
 
-
 # Instancia a aplicação FastAPI
 app = FastAPI(title="Points of Interest")
+
+# Configurar CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permite todas as origens (em desenvolvimento)
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos os métodos
+    allow_headers=["*"],  # Permite todos os headers
+)
+
 
 @app.get("/api/list", response_model=POISearchResponse)
 def list_pois_endpoint():
@@ -22,7 +32,7 @@ def list_pois_endpoint():
     # Retorna a resposta no formato esperado pelo cliente
     return POISearchResponse(results=poi_items)
 
-@app.post("/search", response_model=POISearchResponse)
+@app.post("/api/search", response_model=POISearchResponse)
 def search_pois(request: POISearchRequest):
     """
     Rota para buscar POIs próximos a um ponto (x, y), dentro de uma distância máxima (d-max).
@@ -88,7 +98,7 @@ def create_poi(poi_data: POICreateRequest):
             message="Ocorreu um erro interno ao processar sua requisição"
         )
 
-@app.put("/pois/{poi_id}", response_model=POICreateResponse)
+@app.put("/api/pois/{poi_id}", response_model=POICreateResponse)
 def update_poi_endpoint(
     poi_id: int, 
     update_data: POIUpdateRequest
@@ -124,7 +134,7 @@ def update_poi_endpoint(
         )
     )
 
-@app.delete("/pois/{poi_id}", response_model=POIDeleteResponse)
+@app.delete("/api/pois/{poi_id}", response_model=POIDeleteResponse)
 def delete_poi_endpoint(poi_id: int):
     """
     Remove um POI pelo ID

@@ -88,6 +88,28 @@ Content-Type: application/json
 }
 ```
 
+**Testes com curl**
+```bash
+# Listar todos 
+curl http://localhost:8000/api/list
+
+# Procurar por nome
+curl "http://localhost:8000/api/pois/by-name?name=Casa"
+
+# Excluir por id
+curl -X DELETE http://localhost:8000/api/pois/2   
+
+# Atualizar POI
+curl -X PUT "http://localhost:8000/api/pois/123" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Novo Nome", "x": 23, "y": 33}'
+
+# Encontrar um POI por distância
+curl -s -X POST http://localhost:8000/api/search \
+  -H "Content-Type: application/json" \
+  -d '{"x": 20, "y": 21, "max_distance": 25}'
+```
+
 **Clone do projeto**
 ```bash
 git clone https://github.com/augusto-vieira/points-of-interest.git
