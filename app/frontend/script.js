@@ -1,14 +1,28 @@
-// Inicializa o mapa Leaflet
-var map = L.map('map').setView([40.7128, -74.0060], 13); // Nova York
-
+// Inicialize o mapa globalmente
+let map = L.map('map').setView([0, 0], 2);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
+    attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// Exemplo: marcador fixo
-L.marker([40.748817, -73.985428]) // Empire State
-    .addTo(map)
-    .bindPopup("<b>Empire State Building</b>");
+// Array para guardar os marcadores
+let poiMarkers = [];
+
+// Função para mostrar POIs no mapa cartesiano
+function showPOIsOnMap(pois) {
+    // Remove marcadores antigos
+    poiMarkers.forEach(marker => map.removeLayer(marker));
+    poiMarkers = [];
+    if (!pois || pois.length === 0) return;
+    pois.forEach(poi => {
+        // Adiciona marcador
+        let marker = L.marker([poi.x, poi.y]).addTo(map)
+            .bindPopup(`<b>${poi.name}</b><br>(${poi.x}, ${poi.y})`);
+        poiMarkers.push(marker);
+    });
+    // Centraliza o mapa nos POIs
+    let group = new L.featureGroup(poiMarkers);
+    map.fitBounds(group.getBounds().pad(0.5));
+}
 
 // Função para trocar formulário dinamicamente
 function showForm(action) {
@@ -185,6 +199,7 @@ function showForm(action) {
                                 li.className = "list-group-item";
                                 li.textContent = `${poi.name} (${poi.x}, ${poi.y})`;
                                 listEl.appendChild(li);
+                                showPOIsOnMap(data.results);
                             });
                         } else {
                             listEl.innerHTML = "<li class='list-group-item'>Nenhum POI encontrado.</li>";
@@ -305,6 +320,7 @@ function showForm(action) {
                         const data = await response.json();
                         resultEl.innerHTML = "";
                         if (data.results && data.results.length > 0) {
+                            showPOIsOnMap(data.results);
                             data.results.forEach(poi => {
                                 const li = document.createElement("li");
                                 li.className = "list-group-item";
