@@ -8,9 +8,7 @@ Este projeto implementa uma API REST para cadastro e consulta de **Pontos de Int
 - ✅ Listar todos os POIs cadastrados
 - ✅ Listar POIs por proximidade de um ponto de referência (x, y) com distância máxima (d-max)
 
-📝 Requisitos para ser atendidos:
-
-negativas.
+**📝 Requisitos para ser atendidos:**
 - [x] Listar os **POIs por proximidade**. Este serviço receberá uma coordenada **X** e uma coordenada **Y**, especificando um ponto de referência, bem como uma distância **máxima (d-max)** em metros. O serviço deverá **retornar todos os POIs** da base de dados que estejam a uma distância menor ou igual a d-max a partir do ponto de referência.
 - [x] **Listar** todos os POIs cadastrados
 - [x] **Cadastrar POIs** com **nome** e coordenadas **(x, y)** inteiras não 
@@ -18,7 +16,7 @@ negativas.
 
 📝 Novas funcionalidades:
 - [x] **Atualizar** um POIs
-- [x] **Deletar*** um POIs
+- [x] **Excluir*** um POIs
 - [x] **Encontrar** um POIs **por nome**
 
 ## 📦 Tecnologias
@@ -88,7 +86,7 @@ Content-Type: application/json
 }
 ```
 
-**Testes com curl**
+**Exemplos com curl**
 ```bash
 # Listar todos 
 curl -X GET http://localhost:8000/api/list
