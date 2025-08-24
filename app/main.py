@@ -32,7 +32,7 @@ def list_pois_endpoint():
     # Retorna a resposta no formato esperado pelo cliente
     return POISearchResponse(results=poi_items)
 
-@app.post("/api/search", response_model=POISearchResponse)
+@app.post("/api/{search}", response_model=POISearchResponse)
 def search_pois(request: POISearchRequest):
     """
     Rota para buscar POIs próximos a um ponto (x, y), dentro de uma distância máxima (d-max).
@@ -52,7 +52,7 @@ def search_pois(request: POISearchRequest):
 
     return POISearchResponse(results=poi_items)
 
-@app.get("/api/pois/by-name", response_model=POISearchResponse)
+@app.get("/api/pois/{by_name}", response_model=POISearchResponse)
 def search_pois_by_name(name: str):   
     """
     Rota para buscar POIs por nome.

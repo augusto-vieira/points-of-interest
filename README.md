@@ -91,10 +91,10 @@ Content-Type: application/json
 **Testes com curl**
 ```bash
 # Listar todos 
-curl http://localhost:8000/api/list
+curl -X GET http://localhost:8000/api/list
 
 # Procurar por nome
-curl "http://localhost:8000/api/pois/by-name?name=Casa"
+curl -X GET "http://localhost:8000/api/pois/by-name?name=Casa"
 
 # Excluir por id
 curl -X DELETE http://localhost:8000/api/pois/2   
