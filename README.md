@@ -16,7 +16,7 @@ Este projeto implementa uma API REST para cadastro e consulta de **Pontos de Int
 
 📝 Novas funcionalidades:
 - [x] **Atualizar** um POIs
-- [x] **Excluir*** um POIs
+- [x] **Excluir** um POIs
 - [x] **Encontrar** um POIs **por nome**
 
 ## 📦 Tecnologias

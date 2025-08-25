@@ -86,7 +86,6 @@ def update_poi(poi_id: int, update_data: dict):
     finally:
         session.close()
 
-
 # Função para deletar POI
 def delete_poi(poi_id: int)-> bool:
     """Remove um POI do banco de dados

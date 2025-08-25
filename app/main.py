@@ -68,7 +68,7 @@ def search_pois_by_name(name: str):
     # Retorna a resposta no formato esperado pelo cliente
     return POISearchResponse(results=poi_items)
 
-@app.post("/api/pois", response_model=POICreateResponse)
+@app.post("/api/pois/", response_model=POICreateResponse)
 def create_poi(poi_data: POICreateRequest):
     """
     Rota para cadastrar um POI.

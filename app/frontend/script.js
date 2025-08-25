@@ -147,7 +147,7 @@ function showForm(action) {
                 if (isNaN(x) || isNaN(y)) return showAlert(resultEl, "warning", "Coordenadas inválidas.");
 
                 showAlert(resultEl, "info", "Adicionando...");
-                const { ok, data } = await apiRequest(`${API_BASE}/pois`, "POST", { name, x, y });
+                const { ok, data } = await apiRequest(`${API_BASE}/pois/`, "POST", { name, x, y });
                 ok ? showAlert(resultEl, "success", "POI adicionado com sucesso!") 
                    : showAlert(resultEl, "danger", data.error || "Erro ao adicionar POI.");
             });
