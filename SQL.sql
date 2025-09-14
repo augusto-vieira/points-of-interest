@@ -22,7 +22,7 @@ VALUES ('Casa', 19, 13);
 INSERT INTO pois (name)
 VALUES ('CasaNova');  -- vai retornar erro, não aceita valor vazio.
 
--- Listar fixa de POIs do desafio:
+-- Lista fixa de POIs do desafio:
 INSERT INTO pois (name, x, y) VALUES
     ('Lanchonete', 27, 12),
     ('Posto', 31, 18),

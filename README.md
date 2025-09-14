@@ -106,10 +106,36 @@ curl -X PUT "http://localhost:8000/api/pois/123" \
 curl -s -X POST http://localhost:8000/api/search \
   -H "Content-Type: application/json" \
   -d '{"x": 20, "y": 21, "max_distance": 25}'
+
+# Cadastrar um POI
+curl -X POST http://localhost:8000/api/pois/ \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Casa", "x": 20, "y": 30}'
+
 ```
 
 **Clone do projeto**
 ```bash
 git clone https://github.com/augusto-vieira/points-of-interest.git
 cd points-of-interest/
+```
+
+**Execute todos os testes com cobertura:**
+```bash
+pytest --cov=app --cov=tests --cov-report=term-missing
+```
+
+**Relatório HTML**
+```bash
+pytest --cov=app --cov=tests --cov-report=html
+```
+
+**Rodar apenas um arquivo de teste:**
+```bash
+pytest tests/test_endpoints.py
+```
+**Rodar apenas um teste**
+```bash
+pytest tests/test_endpoints.py -k test_create_poi -v
+pytest tests/test_endpoints.py -k test_list_routes -v
 ```
