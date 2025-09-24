@@ -136,6 +136,13 @@ pytest tests/test_endpoints.py
 ```
 **Rodar apenas um teste**
 ```bash
+uv run pytest
+uv run pytest tests/test_endpoints.py -k test_create_poi -v
+uv run pytest tests/test_endpoints.py
+
 pytest tests/test_endpoints.py -k test_create_poi -v
 pytest tests/test_endpoints.py -k test_list_routes -v
+
+PYTHONPATH=. pytest tests/test_endpoints.py -k test_create_poi -v
+
 ```

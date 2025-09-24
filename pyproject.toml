@@ -3,13 +3,22 @@ name = "points-of-interest"
 version = "0.1.0"
 description = "API para buscar Pontos de Interesse próximos a uma coordenada"
 authors = [{ name = "Augusto Vieira"}]
+requires-python = ">=3.8"
 dependencies = [
     "fastapi",
     "uvicorn",
-    "dotenv",
+    "python-dotenv",
     "sqlalchemy",
-    "psycopg",
+    "psycopg[binary]",
+    "httpx",
     "pytest",
     "pytest-cov",
 ]
-requires-python = ">=3.8"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+addopts = "-v --cov=app --cov-report=term-missing"

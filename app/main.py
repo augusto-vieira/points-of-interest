@@ -7,10 +7,6 @@ from app.models.point import POI
 # Instancia a aplicação FastAPI
 app = FastAPI(title="Points of Interest")
 
-print("Rotas registradas:")
-for route in app.routes:
-    print(route.path, route.methods)
-
 # Configurar CORS
 app.add_middleware(
     CORSMiddleware,
