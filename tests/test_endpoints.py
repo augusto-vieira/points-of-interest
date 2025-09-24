@@ -16,9 +16,9 @@ def test_create_poi():
     assert response.status_code == 200
     data = response.json()
     assert data["success"] is True
-    assert data["poi"]["name"] == "POI Teste"
-    assert data["poi"]["x"] == 10.0
-    assert data["poi"]["y"] == 20.0
+    assert data["poi"]["name"] == payload["name"]
+    assert data["poi"]["x"] == payload["x"]
+    assert data["poi"]["y"] == payload["y"]
     return data["poi"]
 
 def test_list_pois():
@@ -55,7 +55,9 @@ def test_update_poi():
     assert response.status_code == 200
     data = response.json()
     assert data["success"] is True
-    assert data["poi"]["name"] == "POI Atualizado"
+    assert data["poi"]["name"] == update_payload["name"]
+    assert data["poi"]["x"] == update_payload["x"]
+    assert data["poi"]["y"] == update_payload["y"]
 
 def test_delete_poi():
     """Testa remoção de POI via endpoint DELETE."""

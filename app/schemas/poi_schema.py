@@ -14,6 +14,7 @@ class POIItem(BaseModel):
     """
     Representa um POI no retorno da API.
     """
+    id: int
     name: str
     x: int
     y: int

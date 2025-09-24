@@ -27,7 +27,7 @@ def list_pois_endpoint():
     pois = list_pois()
 
     # Converta os objetos ORM para POIItem
-    poi_items = [POIItem(name=poi.name, x=poi.x, y=poi.y) for poi in pois]
+    poi_items = [POIItem(id=poi.id, name=poi.name, x=poi.x, y=poi.y) for poi in pois]
 
     # Retorna a resposta no formato esperado pelo cliente
     return POISearchResponse(results=poi_items)
@@ -46,7 +46,7 @@ def search_pois(request: POISearchRequest):
 
     # Converte para POIItem
     poi_items = [
-        POIItem(name=poi.name, x=poi.x, y=poi.y) 
+        POIItem(id=poi.id,name=poi.name, x=poi.x, y=poi.y) 
         for poi in nearby_pois
     ]
 
@@ -63,7 +63,7 @@ def search_pois_by_name(name: str):
 
     # Converta os objetos ORM para POIItem
     # Isso é necessário para garantir a serialização correta na resposta
-    poi_items = [POIItem(name=poi.name, x=poi.x, y=poi.y) for poi in pois]
+    poi_items = [POIItem(id=poi.id, name=poi.name, x=poi.x, y=poi.y) for poi in pois]
 
     # Retorna a resposta no formato esperado pelo cliente
     return POISearchResponse(results=poi_items)
@@ -75,14 +75,14 @@ def create_poi(poi_data: POICreateRequest):
     """
     try:
             # Adiciona o POI ao banco de dados
-            success = add_poi(name=poi_data.name, x=poi_data.x, y=poi_data.y)
+            created_poi = add_poi(name=poi_data.name, x=poi_data.x, y=poi_data.y)
             
-            if success:
+            if created_poi:
                 # Se necessário, poderia buscar o POI recém-criado para retornar seus dados
                 return POICreateResponse(
                     success=True,
-                    message=f"POI '{poi_data.name}' criado com sucesso",
-                    poi=POIItem(name=poi_data.name, x=poi_data.x, y=poi_data.y)
+                    message=f"POI '{created_poi.name}' criado com sucesso",
+                    poi=POIItem(id=created_poi.id ,name=created_poi.name, x=created_poi.x, y=created_poi.y)
                 )
             else:
                 return POICreateResponse(
@@ -128,6 +128,7 @@ def update_poi_endpoint(
         success=True,
         message="POI atualizado com sucesso",
         poi=POIItem(
+            id=updated_poi.id,
             name=updated_poi.name,
             x=updated_poi.x,
             y=updated_poi.y
